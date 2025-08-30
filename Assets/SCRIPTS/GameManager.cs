@@ -1,13 +1,17 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
 	//public static Player[] Jugadoers;
 	
 	public static GameManager Instancia;
-	
-	public float TiempoDeJuego = 60;
+
+    [SerializeField] private InputManager inputManager;
+    public string verticalInputName = "Vertical";
+
+    public float TiempoDeJuego = 60;
 	
 	public enum EstadoJuego{Calibrando, Jugando, Finalizado}
 	public EstadoJuego EstAct = EstadoJuego.Calibrando;
@@ -90,8 +94,8 @@ public class GameManager : MonoBehaviour
 		if(Input.GetKey(KeyCode.Mouse1) &&
 		   Input.GetKey(KeyCode.Keypad0))
 		{
-			Application.LoadLevel(Application.loadedLevel);
-		}
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
 		
 		//CIERRA LA APLICACION
 		if(Input.GetKeyDown(KeyCode.Escape))
@@ -118,13 +122,13 @@ public class GameManager : MonoBehaviour
 				}
 			}
 
-                if (PlayerInfo1.PJ == null && Input.GetKeyDown(KeyCode.W)) {
+                if (inputManager.IsUpPressed(verticalInputName, "1")) {
                     PlayerInfo1 = new PlayerInfo(0, Player1);
                     PlayerInfo1.LadoAct = Visualizacion.Lado.Izq;
                     SetPosicion(PlayerInfo1);
                 }
 
-                if (PlayerInfo2.PJ == null && Input.GetKeyDown(KeyCode.UpArrow)) {
+                if (inputManager.IsUpPressed(verticalInputName, "2")) {
                     PlayerInfo2 = new PlayerInfo(1, Player2);
                     PlayerInfo2.LadoAct = Visualizacion.Lado.Der;
                     SetPosicion(PlayerInfo2);
@@ -252,19 +256,19 @@ public class GameManager : MonoBehaviour
 	{
 		for(int i = 0; i < ObjsCalibracion1.Length; i++)
 		{
-			ObjsCalibracion1[i].SetActiveRecursively(true);
-			ObjsCalibracion2[i].SetActiveRecursively(true);
+			ObjsCalibracion1[i].SetActive(true);
+			ObjsCalibracion2[i].SetActive(true);
 		}
 		
 		for(int i = 0; i < ObjsTuto2.Length; i++)
 		{
-			ObjsTuto2[i].SetActiveRecursively(false);
-			ObjsTuto1[i].SetActiveRecursively(false);
+			ObjsTuto2[i].SetActive(false);
+			ObjsTuto1[i].SetActive(false);
 		}
 		
 		for(int i = 0; i < ObjsCarrera.Length; i++)
 		{
-			ObjsCarrera[i].SetActiveRecursively(false);
+			ObjsCarrera[i].SetActive(false);
 		}
 		
 		
