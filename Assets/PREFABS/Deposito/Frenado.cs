@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+using static GameSignals;
+
 public class Frenado : MonoBehaviour 
 {
 	public float VelEntrada = 0;
@@ -20,14 +22,26 @@ public class Frenado : MonoBehaviour
 	
 	public bool Frenando = false;
 	bool ReduciendoVel = false;
-	
-	//-----------------------------------------------------//
-	
-	// Use this for initialization
-	void Start () 
+
+    //-----------------------------------------------------//
+
+    private void OnEnable()
+    {
+		CalibrationStarted += Frenar;
+		MatchStarted += RestaurarVel;
+    }
+
+    private void OnDisable()
+    {
+        CalibrationStarted -= Frenar;
+        MatchStarted -= RestaurarVel;
+    }
+
+    // Use this for initialization
+    void Start () 
 	{
 		//RestaurarVel();
-		Frenar();
+		//Frenar();
 	}
 	
 	// Update is called once per frame

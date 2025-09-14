@@ -56,7 +56,9 @@ public class Respawn : MonoBehaviour
 				IgnorarColision(false);
 			}
 		}
-		
+
+		Debug.Log("Player: " + GetComponent<Player>().IdPlayer + ": " + GetComponent<Rigidbody>().linearVelocity);
+
 	}
 	
 	//--------------------------------------------------------//
@@ -69,7 +71,7 @@ public class Respawn : MonoBehaviour
 		
 		if(CPAct.Habilitado())
 		{
-			if(GetComponent<Visualizacion>().LadoAct == Visualizacion.Lado.Der)
+			if(GetComponent<Visualizacion>().GetLadoActual() == PlayerSide.Right)
 				transform.position = CPAct.transform.position + CPAct.transform.right * Random.Range(RangMinDer, RangMaxDer);
 			else 
 				transform.position = CPAct.transform.position + CPAct.transform.right * Random.Range(RangMinDer * (-1), RangMaxDer * (-1));
@@ -77,7 +79,7 @@ public class Respawn : MonoBehaviour
 		}
 		else if(CPAnt != null)
 		{
-			if(GetComponent<Visualizacion>().LadoAct == Visualizacion.Lado.Der)
+			if(GetComponent<Visualizacion>().GetLadoActual() == PlayerSide.Right)
 				transform.position = CPAnt.transform.position + CPAnt.transform.right * Random.Range(RangMinDer, RangMaxDer);
 			else
 				transform.position = CPAnt.transform.position + CPAnt.transform.right * Random.Range(RangMinDer * (-1), RangMaxDer * (-1));

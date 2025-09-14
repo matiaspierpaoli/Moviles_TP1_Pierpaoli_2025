@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+using static GameSignals;
+
 public class Player : MonoBehaviour 
 {
 	public int Dinero = 0;
@@ -10,7 +12,7 @@ public class Player : MonoBehaviour
 	int CantBolsAct = 0;
 	public string TagBolsas = "";
 	
-	public enum Estados{EnDescarga, EnConduccion, EnCalibracion, EnTutorial}
+	public enum Estados{EnDescarga, EnConduccion, EnCalibracion}
 	public Estados EstAct = Estados.EnConduccion;
 	
 	public bool EnConduccion = true;
@@ -18,14 +20,23 @@ public class Player : MonoBehaviour
 	
 	public ControladorDeDescarga ContrDesc;
 	public ContrCalibracion ContrCalib;
-	public ContrTutorial ContrTuto;
 	
 	Visualizacion MiVisualizacion;
-	
-	//------------------------------------------------------------------//
 
-	// Use this for initialization
-	void Start () 
+    //------------------------------------------------------------------//
+
+    private void OnEnable()
+    {
+		GameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameStateChanged -= OnGameStateChanged;
+    }
+
+    // Use this for initialization
+    void Start () 
 	{
 		for(int i = 0; i< Bolasas.Length;i++)
 			Bolasas[i] = null;
@@ -87,17 +98,32 @@ public class Player : MonoBehaviour
 		return ContrDesc;
 	}
 	
-	public void CambiarACalibracion()
+	private void OnGameStateChanged(GameState state)
+	{
+		switch (state)	
+		{
+			case GameState.Boot:
+				break;
+			case GameState.Calibrating:
+				CambiarACalibracion();
+                break;
+			case GameState.Playing:
+				CambiarAConduccion();
+                break;
+			case GameState.Paused:
+				break;
+			case GameState.Finished:
+				break;
+			default:
+				break;
+		}
+	}
+
+
+    public void CambiarACalibracion()
 	{
 		MiVisualizacion.CambiarACalibracion();
 		EstAct = Player.Estados.EnCalibracion;
-	}
-	
-	public void CambiarATutorial()
-	{
-		MiVisualizacion.CambiarATutorial();
-		EstAct = Player.Estados.EnTutorial;
-		ContrTuto.Iniciar();
 	}
 	
 	public void CambiarAConduccion()

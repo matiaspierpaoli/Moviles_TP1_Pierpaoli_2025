@@ -1,19 +1,31 @@
 using System.Diagnostics.Contracts;
 using UnityEngine;
 
+using static GameSignals;
+
 public class ControlDireccion : MonoBehaviour
 {
     [SerializeField] private InputManager inputManager;
 
     float Giro = 0;
 
-    public bool Habilitado = true;
+    public bool Habilitado = false;
     CarController carController;
 
     public int playerId = -1;
     public string inputName = "Horizontal";
 
     //---------------------------------------------------------//
+
+    private void OnEnable()
+    {
+        MatchStarted += TurnOnDirection;
+    }
+
+    private void OnDisable()
+    {
+        MatchStarted -= TurnOnDirection;
+    }
 
     // Use this for initialization
     void Start()
@@ -24,9 +36,15 @@ public class ControlDireccion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Giro = inputManager.GetAxis(inputName, playerId.ToString());
+        if (!Habilitado) return;
 
+        Giro = inputManager.GetAxis(inputName, playerId.ToString());
         carController.SetGiro(Giro);
+    }
+
+    private void TurnOnDirection()
+    {
+        Habilitado = true;
     }
 
     public float GetGiro()

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+using static GameSignals;
+
 /// <summary>
 /// clase encargada de TODA la visualizacion
 /// de cada player, todo aquello que corresconda a 
@@ -8,8 +10,7 @@ using System.Collections;
 /// </summary>
 public class Visualizacion : MonoBehaviour 
 {
-	public enum Lado{Izq, Der}
-	public Lado LadoAct;
+    private PlayerSide LadoAct = PlayerSide.Default;
 	
 	ControlDireccion Direccion;
 	Player Pj;
@@ -92,11 +93,21 @@ public class Visualizacion : MonoBehaviour
 	
 	
 	Rect R;
-	
-	//------------------------------------------------------------------//
-	
-	// Use this for initialization
-	void Start () 
+
+    //------------------------------------------------------------------//
+
+    private void OnEnable()
+    {
+		PlayerSideAssigned += OnPlayerSideAssigned;
+    }
+
+    private void OnDisable()
+    {
+        PlayerSideAssigned -= OnPlayerSideAssigned;
+    }
+
+    // Use this for initialization
+    void Start () 
 	{
 		TempoIntTuto = Intervalo;
 		Direccion = GetComponent<ControlDireccion>();
@@ -139,13 +150,6 @@ public class Visualizacion : MonoBehaviour
 		case Player.Estados.EnCalibracion:
 			//SetCalibr();
 			break;
-			
-			
-		case Player.Estados.EnTutorial:
-			SetInv3();
-			SetTuto();
-			SetVolante();
-			break;
 		}
 		
 		GUI.skin = null;
@@ -183,8 +187,16 @@ public class Visualizacion : MonoBehaviour
 	
 	//---------//
 	
-	public void SetLado(Lado lado)
+	private void OnPlayerSideAssigned(int id, PlayerSide side)
 	{
+        if (id != Pj.IdPlayer) return;
+        SetLado(id == 0 ? PlayerSide.Left : PlayerSide.Right);
+    }
+
+
+    public void SetLado(PlayerSide lado)
+	{
+		if (LadoAct != PlayerSide.Default) return;
 		LadoAct = lado;
 		
 		Rect r = new Rect();
@@ -194,12 +206,12 @@ public class Visualizacion : MonoBehaviour
 		
 		switch (lado)
 		{
-		case Lado.Der:
+		case PlayerSide.Right:
 			r.x = 0.5f;
 			break;
 			
 			
-		case Lado.Izq:
+		case PlayerSide.Left:
 			r.x = 0;
 			break;
 		}
@@ -208,7 +220,7 @@ public class Visualizacion : MonoBehaviour
 		CamConduccion.rect = r;
 		CamDescarga.rect = r;
 		
-		if(LadoAct == Visualizacion.Lado.Izq)
+		if(LadoAct == PlayerSide.Left)
 		{
 			Techo.GetComponent<Renderer>().material.mainTexture = TextNum1;
 		}
@@ -229,7 +241,7 @@ public class Visualizacion : MonoBehaviour
 			R.height = ColorFondoFondoEsc.y *Screen.height /100;
 			R.x = ColorFondoFondoPos.x *Screen.width /100;
 			R.y = ColorFondoFondoPos.y *Screen.height /100;
-			if(LadoAct == Visualizacion.Lado.Der)
+			if(LadoAct == PlayerSide.Right)
 				R.x += (Screen.width)/2;			
 			GUI.Box(R, "");
 			
@@ -241,7 +253,7 @@ public class Visualizacion : MonoBehaviour
 			R.height = (ColorFondoEsc.y *Screen.height /100) * (Pj.ContrDesc.Bonus / (int)Pallet.Valores.Valor2);
 			R.x = ColorFondoPos.x *Screen.width /100;
 			R.y = (ColorFondoPos.y *Screen.height /100) - R.height;
-			if(LadoAct == Visualizacion.Lado.Der)
+			if(LadoAct == PlayerSide.Right)
 				R.x += (Screen.width)/2;			
 			GUI.Box(R, "");
 			
@@ -253,7 +265,7 @@ public class Visualizacion : MonoBehaviour
 			R.height = R.width /2;
 			R.x = BonusPos.x *Screen.width /100;
 			R.y = BonusPos.y *Screen.height /100;
-			if(LadoAct == Visualizacion.Lado.Der)
+			if(LadoAct == PlayerSide.Right)
 				R.x += (Screen.width)/2;
 			GUI.Box(R, "     $" + Pj.ContrDesc.Bonus.ToString("0"));
 		}
@@ -267,7 +279,7 @@ public class Visualizacion : MonoBehaviour
 		R.height = DinEsc.y *Screen.height /100;
 		R.x = DinPos[0].x *Screen.width /100;
 		R.y = DinPos[0].y *Screen.height /100;
-		if(LadoAct == Visualizacion.Lado.Der)
+		if(LadoAct == PlayerSide.Right)
 			R.x = DinPos[1].x *Screen.width /100;
 			//R.x = (Screen.width) - (Screen.width/2) - R.x;
 		GUI.Box(R, "$" + PrepararNumeros(Pj.Dinero));
@@ -281,7 +293,7 @@ public class Visualizacion : MonoBehaviour
 		R.height = ReadyEsc.y *Screen.height /100;
 		R.x = ReadyPos.x *Screen.width /100;
 		R.y = ReadyPos.y *Screen.height /100;
-		if(LadoAct == Visualizacion.Lado.Der)
+		if(LadoAct == PlayerSide.Right)
 			R.x = (Screen.width) - R.x - R.width;
 		
 		switch(Pj.ContrCalib.EstAct)
@@ -318,23 +330,6 @@ public class Visualizacion : MonoBehaviour
 			GUI.Box(R,"");
 			
 			break;
-		}
-	}
-	
-	void SetTuto()
-	{
-		if(Pj.ContrTuto.Finalizado)
-		{
-			GUI.skin = GS_TutoCalib;
-			
-			R.width = ReadyEsc.x *Screen.width /100;
-			R.height = ReadyEsc.y *Screen.height /100;
-			R.x = ReadyPos.x *Screen.width /100;
-			R.y = ReadyPos.y *Screen.height /100;
-			if(LadoAct == Visualizacion.Lado.Der)
-				R.x = (Screen.width) - R.x - R.width;
-			
-			GUI.Box(R,"ESPERANDO AL OTRO JUGADOR");
 		}
 	}
 	
@@ -430,7 +425,7 @@ public class Visualizacion : MonoBehaviour
 				contador++;
 		}
 		
-		if(LadoAct == Visualizacion.Lado.Der)
+		if(LadoAct == PlayerSide.Right)
 		{
 			//R.x = (Screen.width) - R.x - R.width;
 			R.x = FondoPos[1].x * Screen.width /100;
@@ -460,7 +455,7 @@ public class Visualizacion : MonoBehaviour
 				contador++;
 		}
 		
-		if(LadoAct == Visualizacion.Lado.Der)
+		if(LadoAct == PlayerSide.Right)
 		{
 			//R.x = (Screen.width) - (Screen.width/2) - R.x;
 			R.x = FondoPos[1].x * Screen.width /100;
@@ -557,6 +552,5 @@ public class Visualizacion : MonoBehaviour
 		return res;
 	}
 	
-	
-	
+	public PlayerSide GetLadoActual() => LadoAct;
 }

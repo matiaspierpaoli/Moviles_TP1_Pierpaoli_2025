@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using static GameSignals;
+
 public class CarController : MonoBehaviour {
 
     public List<WheelCollider> throttleWheels = new List<WheelCollider>();
@@ -9,16 +11,28 @@ public class CarController : MonoBehaviour {
     public float throttleCoefficient = 20000f;
     public float maxTurn = 20f;
     float giro = 0f;
-    float acel = 1f;
+    float acel = 0f;
 
-    // Use this for initialization
-    void Start () {
-		
-	}
+    private bool isAccelAllowed = false;
 
+    private void OnEnable()
+    {
+        CalibrationStarted += () => isAccelAllowed = false;
+        MatchStarted += () => isAccelAllowed = true;
+        MatchEnded += () => isAccelAllowed = true;
+    }
+
+    private void OnDisable()
+    {
+        CalibrationStarted -= () => isAccelAllowed = false;
+        MatchStarted -= () => isAccelAllowed = true;
+        MatchEnded -= () => isAccelAllowed = true;
+
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        if (!isAccelAllowed) return;
         foreach (var wheel in throttleWheels) {
             wheel.motorTorque = throttleCoefficient * T.GetFDT() * acel;
         }
