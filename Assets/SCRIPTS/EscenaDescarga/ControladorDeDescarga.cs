@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
+using static GameSignals;
+
 public class ControladorDeDescarga : MonoBehaviour 
 {
 	System.Collections.Generic.List<Pallet.Valores> Ps = new System.Collections.Generic.List<Pallet.Valores>();
@@ -38,11 +40,21 @@ public class ControladorDeDescarga : MonoBehaviour
 	
 	public AnimMngDesc ObjAnimado;
 
-	
-	//--------------------------------------------------------------//
 
-	// Use this for initialization
-	void Start () 
+    //--------------------------------------------------------------//
+
+    private void OnEnable()
+    {
+        MatchEnded += FinDelJuego;
+    }
+
+    private void OnDisable()
+    {
+        MatchEnded -= FinDelJuego;
+    }
+
+    // Use this for initialization
+    void Start () 
 	{
 		for (int i = 0; i < Componentes.Length; i++)
 		{

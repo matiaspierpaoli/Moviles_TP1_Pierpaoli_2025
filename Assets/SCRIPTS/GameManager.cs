@@ -47,12 +47,14 @@ public class GameManager : MonoBehaviour
     {
         CalibrationDone += OnCalibrationDone;
         GameStateChanged += (GameState gameState) => currentGameState = gameState;
+        BothPlayersFinished += () => RaiseGameState(GameState.Finished);
     }
 
     private void OnDisable()
     {
         CalibrationDone -= OnCalibrationDone;
         GameStateChanged -= (GameState gameState) => currentGameState = gameState;
+        BothPlayersFinished -= () => RaiseGameState(GameState.Finished);
     }
 
     private void Start()
@@ -117,6 +119,7 @@ public class GameManager : MonoBehaviour
             case GameState.Paused:
                 break;
             case GameState.Finished:
+                EndMatch();
                 break;
             default:
                 break;

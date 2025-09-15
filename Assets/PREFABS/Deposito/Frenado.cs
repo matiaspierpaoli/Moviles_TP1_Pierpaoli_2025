@@ -29,12 +29,14 @@ public class Frenado : MonoBehaviour
     {
 		CalibrationStarted += Frenar;
 		MatchStarted += RestaurarVel;
+		MatchEnded += Frenar;
     }
 
     private void OnDisable()
     {
         CalibrationStarted -= Frenar;
         MatchStarted -= RestaurarVel;
+        MatchEnded -= Frenar;
     }
 
     // Use this for initialization

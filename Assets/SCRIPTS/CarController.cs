@@ -19,14 +19,14 @@ public class CarController : MonoBehaviour {
     {
         CalibrationStarted += () => isAccelAllowed = false;
         MatchStarted += () => isAccelAllowed = true;
-        MatchEnded += () => isAccelAllowed = true;
+        MatchEnded += () => isAccelAllowed = false;
     }
 
     private void OnDisable()
     {
         CalibrationStarted -= () => isAccelAllowed = false;
         MatchStarted -= () => isAccelAllowed = true;
-        MatchEnded -= () => isAccelAllowed = true;
+        MatchEnded -= () => isAccelAllowed = false;
 
     }
 	
