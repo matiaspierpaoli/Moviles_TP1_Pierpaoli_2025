@@ -93423,8 +93423,18 @@ PrefabInstance:
       objectReference: {fileID: 976501147}
     - target: {fileID: 114630957717379974, guid: b81b1a58a0f14c9439cbdd014e695f71,
         type: 3}
+      propertyPath: maxTurn
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630957717379974, guid: b81b1a58a0f14c9439cbdd014e695f71,
+        type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630957717379974, guid: b81b1a58a0f14c9439cbdd014e695f71,
+        type: 3}
+      propertyPath: throttleCoefficient
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 114643806136207610, guid: b81b1a58a0f14c9439cbdd014e695f71,
         type: 3}
@@ -93934,8 +93944,18 @@ PrefabInstance:
       objectReference: {fileID: 976501147}
     - target: {fileID: 114630957717379974, guid: b81b1a58a0f14c9439cbdd014e695f71,
         type: 3}
+      propertyPath: maxTurn
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630957717379974, guid: b81b1a58a0f14c9439cbdd014e695f71,
+        type: 3}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114630957717379974, guid: b81b1a58a0f14c9439cbdd014e695f71,
+        type: 3}
+      propertyPath: throttleCoefficient
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 114643806136207610, guid: b81b1a58a0f14c9439cbdd014e695f71,
         type: 3}
