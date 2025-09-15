@@ -1,35 +1,38 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.UI;
 
 public class LoopTextura : MonoBehaviour 
 {
-	public float Intervalo = 1;
-	float Tempo = 0;
-	
-	public Texture2D[] Imagenes;
-	int Contador = 0;
+    public float interval = 1f;
+    private float aux = 0f;
 
-	// Use this for initialization
-	void Start () 
-	{
-		if(Imagenes.Length > 0)
-			GetComponent<Renderer>().material.mainTexture = Imagenes[0];
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		Tempo += Time.deltaTime;
-		
-		if(Tempo >= Intervalo)
-		{
-			Tempo = 0;
-			Contador++;
-			if(Contador >= Imagenes.Length)
-			{
-				Contador = 0;
-			}
-			GetComponent<Renderer>().material.mainTexture = Imagenes[Contador];
-		}
-	}
+    public Sprite[] Images;
+    private int Contador = 0;
+
+    private Image imageComponent;
+
+    void Start()
+    {
+        imageComponent = GetComponent<Image>();
+
+        if (Images.Length > 0 && imageComponent != null)
+            imageComponent.sprite = Images[0];
+    }
+
+    void Update()
+    {
+        aux += Time.deltaTime;
+
+        if (aux >= interval)
+        {
+            aux = 0f;
+            Contador++;
+            if (Contador >= Images.Length)
+            {
+                Contador = 0;
+            }
+            if (imageComponent != null)
+                imageComponent.sprite = Images[Contador];
+        }
+    }
 }

@@ -1,10 +1,11 @@
 using System;
-public enum GameState { Boot, Calibrating, Playing, Paused, Finished }
+public enum GameState { Calibrating, Playing, Paused, Finished }
 public enum PlayerSide { Left, Right, Default}
 
 public static class GameSignals
 {
     public static event Action<GameState> GameStateChanged;
+    public static event Action<int> PlayerSelected;
     public static event Action CalibrationStarted;
     public static event Action MatchStarted;
     public static event Action MatchEnded;
@@ -16,6 +17,7 @@ public static class GameSignals
     public static event Action<int> CalibrationDone; // playerId
 
     public static void RaiseGameState(GameState s) => GameStateChanged?.Invoke(s);
+    public static void RaisePlayerSelected(int id) => PlayerSelected?.Invoke(id);
     public static void RaiseCalibrationStarted() => CalibrationStarted?.Invoke();
     public static void RaiseCalibrationDone(int id) => CalibrationDone?.Invoke(id);
     public static void RaiseMatchStarted() => MatchStarted?.Invoke();

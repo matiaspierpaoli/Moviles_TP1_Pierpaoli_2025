@@ -1,15 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 using static GameSignals;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instancia { get; private set; }
+    private GameState currentGameState = GameState.Calibrating;
 
     [Header("Match")]
-    [SerializeField] private float matchLengthSeconds = 60f;
     [SerializeField] private bool autoStartAfterBothTutorials = true;
+    [SerializeField] float changeToPlayingStateDuration = 1f;
+    [SerializeField] float startCountdown = 3f;
+    [SerializeField] private float matchLengthSeconds = 60f;
+    [SerializeField] bool isCountdownAllowed = false;
+    [SerializeField] Text StartCountdownText;
+    [SerializeField] Text GameCountdownText;
+
+    [Header("Input")]
+    [SerializeField] private string verticalInputName = "Vertical";
 
     [Header("Players")]
     [SerializeField] private Player player1;
@@ -37,11 +46,13 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         CalibrationDone += OnCalibrationDone;
+        GameStateChanged += (GameState gameState) => currentGameState = gameState;
     }
 
     private void OnDisable()
     {
         CalibrationDone -= OnCalibrationDone;
+        GameStateChanged -= (GameState gameState) => currentGameState = gameState;
     }
 
     private void Start()
@@ -52,19 +63,63 @@ public class GameManager : MonoBehaviour
         RaisePlayerSideAssigned(0, PlayerSide.Left);
         RaisePlayerSideAssigned(1, PlayerSide.Right);
 
+        GameCountdownText.transform.parent.gameObject.SetActive(false);
+        StartCountdownText.gameObject.SetActive(false);
+
         RaiseCalibrationStarted();
         RaiseGameState(GameState.Calibrating);
     }
 
     private void Update()
     {
-        if (!_running) return;
-
-        _matchTimer -= Time.deltaTime;
-        if (_matchTimer <= 0f)
+        switch (currentGameState)   
         {
-            _matchTimer = 0f;
-            EndMatch();
+            case GameState.Calibrating:
+                if (!player1.selected)
+                {
+                    if (InputManager.Instance.IsUpPressed(verticalInputName, "0"))
+                    {
+                        RaisePlayerSelected(0);
+                    }
+                }
+
+                if (!player2.selected)
+                {
+                    if (InputManager.Instance.IsUpPressed(verticalInputName, "1"))
+                    {
+                        RaisePlayerSelected(1);
+                    }
+                }
+                break;
+            case GameState.Playing:
+
+                if (isCountdownAllowed)
+                {
+                    startCountdown -= Time.deltaTime;
+                    if (startCountdown < 0)
+                    {
+                        BeginMatch();
+                        isCountdownAllowed = false;
+                    }
+                }
+                else
+                {
+                    _matchTimer -= Time.deltaTime;
+                    if (_matchTimer <= 0f)
+                    {
+                        _matchTimer = 0f;
+                        EndMatch();
+                    }
+                }
+
+                UpdateUI();
+                break;
+            case GameState.Paused:
+                break;
+            case GameState.Finished:
+                break;
+            default:
+                break;
         }
     }
 
@@ -72,24 +127,6 @@ public class GameManager : MonoBehaviour
     private void SetPlayerUI(int playerId, bool visible)
     {
         RaiseTogglePlayerUI(playerId, visible);
-    }
-
-    private void StartCountdownThenMatch(float seconds = 3f)
-    {
-        StartCoroutine(CountdownCoroutine(seconds));
-    }
-
-    private System.Collections.IEnumerator CountdownCoroutine(float seconds)
-    {
-        RaiseGameState(GameState.Playing);
-        float t = seconds;
-        while (t > 0f)
-        {
-            RaiseCountdown(Mathf.Ceil(t));
-            t -= Time.deltaTime;
-            yield return null;
-        }
-        BeginMatch();
     }
 
     private void BeginMatch()
@@ -121,7 +158,51 @@ public class GameManager : MonoBehaviour
         _calibDone.Add(playerId);
         if (_calibDone.Count >= 2)
         {
-            StartCountdownThenMatch(3f);
+            StartCoroutine(CountdownCoroutine(changeToPlayingStateDuration));
         }
+    }
+
+    // ---------- Internal ----------
+
+    private System.Collections.IEnumerator CountdownCoroutine(float seconds)
+    {
+        float t = seconds;
+        while (t > 0f)
+        {
+            RaiseCountdown(Mathf.Ceil(t));
+            t -= Time.deltaTime;
+            yield return null;
+        }
+
+        RaiseGameState(GameState.Playing);
+        isCountdownAllowed = true;
+    }
+
+    private void UpdateUI()
+    {
+        if (isCountdownAllowed)
+        {
+            if (startCountdown > 1)
+            {
+                StartCountdownText.text = startCountdown.ToString("0");
+            }
+            else
+            {
+                StartCountdownText.text = "GO";
+            }
+        }
+
+        StartCountdownText.gameObject.SetActive(isCountdownAllowed);
+        GameCountdownText.text = _matchTimer.ToString("00");
+        GameCountdownText.transform.parent.gameObject.SetActive(!isCountdownAllowed);
+    }
+
+    public bool IsPlatformPC()
+    {
+#if PLATFORM_ANDROID
+        return false;
+#else
+        return true;
+#endif
     }
 }

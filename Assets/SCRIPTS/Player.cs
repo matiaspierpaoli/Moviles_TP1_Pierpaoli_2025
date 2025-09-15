@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 	int CantBolsAct = 0;
 	public string TagBolsas = "";
 	
-	public enum Estados{EnDescarga, EnConduccion, EnCalibracion}
+	public enum Estados{EnDescarga, EnConduccion, EnCalibracion, Default }
 	public Estados EstAct = Estados.EnConduccion;
 	
 	public bool EnConduccion = true;
@@ -23,16 +23,22 @@ public class Player : MonoBehaviour
 	
 	Visualizacion MiVisualizacion;
 
+    public bool selected = false;
+    public bool FinCalibrado = false;
+    public bool FinTuto = false;
+
     //------------------------------------------------------------------//
 
     private void OnEnable()
     {
 		GameStateChanged += OnGameStateChanged;
+		PlayerSelected += OnPlayerSelected;
     }
 
     private void OnDisable()
     {
         GameStateChanged -= OnGameStateChanged;
+        PlayerSelected -= OnPlayerSelected;
     }
 
     // Use this for initialization
@@ -52,7 +58,14 @@ public class Player : MonoBehaviour
 	
 	//------------------------------------------------------------------//
 	
-	public bool AgregarBolsa(Bolsa b)
+	private void OnPlayerSelected(int id)
+	{
+		if (id == IdPlayer)
+			selected = true;
+	}
+
+
+    public bool AgregarBolsa(Bolsa b)
 	{
 		if(CantBolsAct + 1 <= Bolasas.Length)
 		{
@@ -102,8 +115,7 @@ public class Player : MonoBehaviour
 	{
 		switch (state)	
 		{
-			case GameState.Boot:
-				break;
+
 			case GameState.Calibrating:
 				CambiarACalibracion();
                 break;
@@ -122,20 +134,20 @@ public class Player : MonoBehaviour
 
     public void CambiarACalibracion()
 	{
-		MiVisualizacion.CambiarACalibracion();
 		EstAct = Player.Estados.EnCalibracion;
+		MiVisualizacion.CambiarACalibracion();
 	}
 	
 	public void CambiarAConduccion()
 	{
-		MiVisualizacion.CambiarAConduccion();
 		EstAct = Player.Estados.EnConduccion;
+		MiVisualizacion.CambiarAConduccion();
 	}
 	
 	public void CambiarADescarga()
 	{
-		MiVisualizacion.CambiarADescarga();
 		EstAct = Player.Estados.EnDescarga;
+		MiVisualizacion.CambiarADescarga();
 	}
 	
 	public void SacarBolasa()

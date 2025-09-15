@@ -4,47 +4,59 @@ using UnityEngine;
 
 public class PalletMover : ManejoPallets
 {
-
     [SerializeField] private InputManager inputManager;
     public int playerID = -1;
     public string horizontalInputName = "Horizontal";
     public string verticalInputName = "Vertical";
 
-
     public ManejoPallets Desde, Hasta;
-    bool segundoCompleto = false;
+    private enum EstadoPallet { Default, FirstStep, SecondStep }
+    private EstadoPallet currentState = EstadoPallet.Default;
 
     private void Update()
     {
+        float horizontalInput = InputManager.Instance.GetAxis(horizontalInputName, playerID.ToString());
+        float verticalInput = InputManager.Instance.GetAxis(verticalInputName, playerID.ToString());
 
-        if (!Tenencia() && Desde.Tenencia() && inputManager.GetAxis(horizontalInputName, playerID.ToString()) > inputManager.GetMinAxisValue())
+        switch (currentState)
         {
-            PrimerPaso();
-        }
-        if (Tenencia() && inputManager.GetAxis(verticalInputName, playerID.ToString()) < inputManager.GetMinAxisValue())
-        {
-            SegundoPaso();
-        }
-        if (segundoCompleto && inputManager.GetAxis(horizontalInputName, playerID.ToString()) > inputManager.GetMinAxisValue())
-        {
-            TercerPaso();
+            case EstadoPallet.Default:
+                if (!Tenencia() && Desde.Tenencia() && horizontalInput < -InputManager.Instance.GetMinAxisValue())
+                {
+                    PrimerPaso();
+                }
+                break;
+
+            case EstadoPallet.FirstStep:
+                if (Tenencia() && verticalInput > InputManager.Instance.GetMinAxisValue())
+                {
+                    SegundoPaso();
+                }
+                break;
+
+            case EstadoPallet.SecondStep:
+                if (horizontalInput > InputManager.Instance.GetMinAxisValue())
+                {
+                    TercerPaso();
+                }
+                break;
         }
     }
 
     void PrimerPaso()
     {
         Desde.Dar(this);
-        segundoCompleto = false;
+        currentState = EstadoPallet.FirstStep;
     }
     void SegundoPaso()
     {
         base.Pallets[0].transform.position = transform.position;
-        segundoCompleto = true;
+        currentState = EstadoPallet.SecondStep;
     }
     void TercerPaso()
     {
         Dar(Hasta);
-        segundoCompleto = false;
+        currentState = EstadoPallet.Default;
     }
 
     public override void Dar(ManejoPallets receptor)

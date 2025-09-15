@@ -6,52 +6,24 @@ using static GameSignals;
 public class ContrCalibracion : MonoBehaviour
 {
 	public Player Pj;
-	/*
-	public string ManoIzqName = "Left Hand";
-	public string ManoDerName = "Right Hand";
-	
-	bool StayIzq = false;
-	bool StayDer = false;
-	*/
-	/*
-	public float TiempCalib = 3;
-	float Tempo = 0;
-	*/
+
 	public float TiempEspCalib = 3;
 	float Tempo2 = 0;
 	
-	//bool EnTutorial = false;
-	
-	public enum Estados{Calibrando, Tutorial, Finalizado}
-	public Estados EstAct = Estados.Calibrando;
+	public enum Estados{Calibrating, Tutorial, Finished}
+	public Estados EstAct = Estados.Calibrating;
 	
 	public ManejoPallets Partida;
 	public ManejoPallets Llegada;
 	public Pallet P;
     public ManejoPallets palletsMover;
 
-    private void OnEnable()
-    {
-		GameStateChanged += OnCalibrationStarted;
-    }
-
-    private void OnDisable()
-    {
-        GameStateChanged -= OnCalibrationStarted;
-    }
-
     //----------------------------------------------------//
 
-    // Use this for initialization
     void Start () 
 	{
-        /*
-		renderer.enabled = false;
-		collider.enabled = false;
-		*/
         palletsMover.enabled = false;
-        Pj.ContrCalib = this;
-		
+        Pj.ContrCalib = this;		
 		
 		P.CintaReceptora = Llegada.gameObject;
 		Partida.Recibir(P);
@@ -59,109 +31,36 @@ public class ContrCalibracion : MonoBehaviour
 		SetActivComp(false);
 	}
 	
-	// Update is called once per frame
 	void Update ()
 	{
-		if(EstAct == ContrCalibracion.Estados.Tutorial)
-		{
-			if(Tempo2 < TiempEspCalib)
-			{
-				Tempo2 += T.GetDT();
-				if(Tempo2 > TiempEspCalib)
-				{
-					 SetActivComp(true);
-				}
-			}
-		}
-		
-		/*
-		if(Calibrado)
-		{
-			if(Tempo2 < TiempEspCalib)
-			{
-				Tempo2 += Time.deltaTime;
-				if(Tempo2 > TiempEspCalib)
-				{
-					PrenderVolante();
-				}
-			}
-			
-			if(VolanteEncendido)
-			{
-				if(StayIzq && StayDer)
-				{
-					if(Tempo < TiempCalib)
-					{
-						Tempo += Time.deltaTime;
-						if(Tempo > TiempCalib)
-						{
-							FinCalibracion();
-						}
-					}
-				}
-			}
-		}
-		*/
-	}
-	/*
-	void OnTriggerStay(Collider coll)
-	{
-		if(coll.name == ManoIzqName)
-			StayIzq = true;
-		else if(coll.name == ManoDerName)
-			StayDer = true;
-	}
-	
-	void OnTriggerExit(Collider coll)
-	{
-		if(coll.name == ManoIzqName || coll.name == ManoDerName)
-			Reiniciar();
-	}
-	*/
-	//----------------------------------------------------//
-	/*
-	void Reiniciar()
-	{
-		bool StayIzq = false;
-		bool StayDer = false;
-		Tempo = 0;
-	}
-	
-	void PrenderVolante()
-	{
-		VolanteEncendido = true;
-		renderer.enabled = true;
-		collider.enabled = true;
-	}
-	*/
-	
-	private void OnCalibrationStarted(GameState s)
-	{
-        palletsMover.enabled = true;
-		SetActivComp(true);
+        if (EstAct == ContrCalibracion.Estados.Calibrating && Pj.selected)
+        {
+            IniciarTesteo();
+        }
+        if (EstAct == ContrCalibracion.Estados.Tutorial)
+        {
+            if (Tempo2 < TiempEspCalib)
+            {
+                Tempo2 += T.GetDT();
+                if (Tempo2 > TiempEspCalib)
+                {
+                    SetActivComp(true);
+                }
+            }
+        }
     }
 
-
-    void FinCalibracion()
-	{
-		/*
-		Reiniciar();
-		GM.CambiarATutorial(Pj.IdPlayer);
-		*/
-	}
-	
-	public void IniciarTesteo()
-	{
-		EstAct = ContrCalibracion.Estados.Tutorial;
-        
-        //Reiniciar();
+    void IniciarTesteo()
+    {
+        EstAct = Estados.Tutorial;
+        palletsMover.enabled = true;
     }
 	
 	public void FinTutorial()
 	{
-		EstAct = ContrCalibracion.Estados.Finalizado;
+		EstAct = ContrCalibracion.Estados.Finished;
         palletsMover.enabled = false;
-        //GM.FinCalibracion(Pj.IdPlayer);
+        Pj.FinCalibrado = true;
         RaiseCalibrationDone(Pj.IdPlayer);
     }
 	
