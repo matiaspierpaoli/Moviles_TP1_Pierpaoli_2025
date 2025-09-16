@@ -6,6 +6,7 @@ using static GameSignals;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instancia { get; private set; }
+    public GameConfig Config { get; private set; }
     private GameState currentGameState = GameState.Calibrating;
 
     [Header("Match")]
@@ -59,6 +60,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        var ctx = GameContext.Instance;
+        var cfg = (ctx != null) ? ctx.Current : new GameConfig { mode = GameMode.Multiplayer };
+        Config = cfg;
+        Debug.Log("Game mode: " + Config.mode.ToString());
+
         _running = false;
         _matchTimer = matchLengthSeconds;
 
