@@ -1,31 +1,33 @@
 using System;
 public enum GameState { Calibrating, Playing, Paused, Finished }
-public enum PlayerSide { Left, Right, Default}
+public enum PlayerSide { Left, Right, Middle, Default}
 
 public static class GameSignals
 {
+    public static event Action SingleplayerActive;
+    public static event Action MultiplayerActive;
     public static event Action<GameState> GameStateChanged;
     public static event Action<int> PlayerSelected;
     public static event Action CalibrationStarted;
     public static event Action MatchStarted;
     public static event Action MatchEnded;
-    public static event Action BothPlayersFinished;
+    public static event Action<int> PlayerFinished;
     public static event Action<float> CountdownTick;
 
-    public static event Action<int, bool> TogglePlayerUI; // (playerId, visible)
     public static event Action<int, PlayerSide> PlayerSideAssigned;
 
     public static event Action<int> CalibrationDone; // playerId
 
+    public static void RaiseSingleplayerActive() => SingleplayerActive?.Invoke();
+    public static void RaiseMultiplayerActive() => MultiplayerActive?.Invoke();
     public static void RaiseGameState(GameState s) => GameStateChanged?.Invoke(s);
     public static void RaisePlayerSelected(int id) => PlayerSelected?.Invoke(id);
     public static void RaiseCalibrationStarted() => CalibrationStarted?.Invoke();
     public static void RaiseCalibrationDone(int id) => CalibrationDone?.Invoke(id);
     public static void RaiseMatchStarted() => MatchStarted?.Invoke();
     public static void RaiseMatchEnded() => MatchEnded?.Invoke();
-    public static void RaiseBothPlayersFinished() => BothPlayersFinished?.Invoke();
+    public static void RaisePlayerFinished(int id) => PlayerFinished?.Invoke(id);
     public static void RaiseCountdown(float t) => CountdownTick?.Invoke(t);
-    public static void RaiseTogglePlayerUI(int id, bool v) => TogglePlayerUI?.Invoke(id, v);
     public static void RaisePlayerSideAssigned(int id, PlayerSide side) => PlayerSideAssigned?.Invoke(id, side);
 
 }

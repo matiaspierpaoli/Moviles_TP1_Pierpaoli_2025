@@ -1,10 +1,14 @@
 using UnityEngine;
-using System.Collections;
 
 using static GameSignals;
+using System;
 
 public class Player : MonoBehaviour 
 {
+	[SerializeField] private Transform leftSideStartPoint;
+	[SerializeField] private Transform rightSideStartPoint;
+	[SerializeField] private Transform middleStartPoint;
+
 	public int Dinero = 0;
 	public int IdPlayer = 0;
 	
@@ -26,19 +30,29 @@ public class Player : MonoBehaviour
     public bool selected = false;
     public bool FinCalibrado = false;
     public bool FinTuto = false;
+	public bool finishedRace = false;
 
     //------------------------------------------------------------------//
 
+	private void Awake()
+    {
+		MiVisualizacion = GetComponent<Visualizacion>();
+    }
+
     private void OnEnable()
     {
-		GameStateChanged += OnGameStateChanged;
-		PlayerSelected += OnPlayerSelected;
+        GameStateChanged += OnGameStateChanged;
+        PlayerSelected += OnPlayerSelected;
+
+        PlayerSideAssigned += OnPlayerSideAssigned;
     }
 
     private void OnDisable()
     {
         GameStateChanged -= OnGameStateChanged;
         PlayerSelected -= OnPlayerSelected;
+
+        PlayerSideAssigned -= OnPlayerSideAssigned;
     }
 
     // Use this for initialization
@@ -46,24 +60,36 @@ public class Player : MonoBehaviour
 	{
 		for(int i = 0; i< Bolasas.Length;i++)
 			Bolasas[i] = null;
-		
-		MiVisualizacion = GetComponent<Visualizacion>();
 	}
-	
-	// Update is called once per frame
-	void Update () 
+
+    //------------------------------------------------------------------//
+
+    private void OnPlayerSideAssigned(int id, PlayerSide side)
+    {
+        if (id != IdPlayer) return;
+
+        Transform t = null;
+        switch (side)
+        {
+            case PlayerSide.Left: t = leftSideStartPoint; break;
+            case PlayerSide.Right: t = rightSideStartPoint; break;
+            case PlayerSide.Middle: t = middleStartPoint; break;
+        }
+        if (t != null) ChangePlayerTransform(t);
+    }
+
+    private void ChangePlayerTransform(Transform newTransform)
 	{
-	
+		transform.position = newTransform.position;
+		transform.rotation = newTransform.rotation;
 	}
-	
-	//------------------------------------------------------------------//
-	
-	private void OnPlayerSelected(int id)
+
+
+    private void OnPlayerSelected(int id)
 	{
 		if (id == IdPlayer)
 			selected = true;
 	}
-
 
     public bool AgregarBolsa(Bolsa b)
 	{
@@ -115,7 +141,6 @@ public class Player : MonoBehaviour
 	{
 		switch (state)	
 		{
-
 			case GameState.Calibrating:
 				CambiarACalibracion();
                 break;

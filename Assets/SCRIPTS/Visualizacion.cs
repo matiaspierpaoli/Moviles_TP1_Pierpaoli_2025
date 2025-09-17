@@ -12,54 +12,62 @@ using static GameSignals;
 /// </summary>
 public class Visualizacion : MonoBehaviour 
 {
-    private PlayerSide LadoAct = PlayerSide.Default;
-	
-	ControlDireccion Direccion;
-	Player Pj;
+    [Header("General")]
+    [SerializeField] private GameObject calibratingScene;
 
-    public GameObject uiRoot;
-    private EnableInPlayerState[] enableInPlayerStates;
+    [Header("UI")]
+    [SerializeField] private GameObject UIRoot;
+    [SerializeField] GameObject waitStateObject;
+    [SerializeField] GameObject virtualJoystickObject;
 
-    //las distintas camaras
+    [Header("Deposit")]
+    public GameObject BonusRoot;
+    public Image BonusFill;
+    public Text BonusText;
+
+    [Header("Cameras")]
     public Camera CamCalibracion;
 	public Camera CamConduccion;
 	public Camera CamDescarga;
 
-    //PARA EL INVENTARIO
+    [Header("Inventory")]
+    public Image Inventario;
     public float Parpadeo = 0.8f;
     public float TempParp = 0;
     public bool PrimIma = true;
     public Sprite[] InvSprites;
     public Text Dinero;
 
-    public Image Inventario;
 
-    //BONO DE DESCARGA
-    public GameObject BonusRoot;
-    public Image BonusFill;
-    public Text BonusText;
-
-
-    //CALIBRACION MAS TUTO BASICO
+    [Header("Tutorial Steps")]
     public GameObject TutoCalibrando;
     public GameObject TutoDescargando;
     public GameObject TutoFinalizado;
 
+    private EnableInPlayerState[] enableInPlayerStates;
+    private PlayerSide LadoAct = PlayerSide.Default;
+
+	ControlDireccion Direccion;
+	Player Pj;
+    
     //------------------------------------------------------------------//
 
     private void OnEnable()
     {
 		PlayerSideAssigned += OnPlayerSideAssigned;
+        PlayerFinished += OnPlayerFinished;
     }
 
     private void OnDisable()
     {
         PlayerSideAssigned -= OnPlayerSideAssigned;
+        PlayerFinished -= OnPlayerFinished;
     }
 
     private void Awake()
     {
-        enableInPlayerStates = uiRoot.GetComponentsInChildren<EnableInPlayerState>(includeInactive: true);
+		Pj = GetComponent<Player>();
+        enableInPlayerStates = UIRoot.GetComponentsInChildren<EnableInPlayerState>(includeInactive: true);
 
         foreach (var component in enableInPlayerStates)
         {
@@ -67,14 +75,16 @@ public class Visualizacion : MonoBehaviour
         }
     }
 
-    // Use this for initialization
     void Start () 
 	{
 		Direccion = GetComponent<ControlDireccion>();
-		Pj = GetComponent<Player>();
-	}
+
+        virtualJoystickObject.SetActive(true);
+        UIRoot.SetActive(true);
+        waitStateObject.SetActive(false);
+        calibratingScene.SetActive(true);
+    }
 	
-	// Update is called once per frame
 	void Update () 
 	{
         switch (Pj.EstAct)
@@ -134,12 +144,21 @@ public class Visualizacion : MonoBehaviour
 	
 	//---------//
 	
-	private void OnPlayerSideAssigned(int id, PlayerSide side)
-	{
-        if (id != Pj.IdPlayer) return;
-        SetLado(id == 0 ? PlayerSide.Left : PlayerSide.Right);
+    private void OnPlayerFinished(int id)
+    {
+        if (id == Pj.IdPlayer)
+        {
+            waitStateObject.SetActive(true);
+            virtualJoystickObject.SetActive(false);
+            gameObject.SetActive(false);
+        }
     }
 
+    private void OnPlayerSideAssigned(int id, PlayerSide side)
+	{
+        if (id == Pj.IdPlayer)
+            SetLado(side);
+    }
 
     public void SetLado(PlayerSide lado)
 	{
@@ -153,6 +172,15 @@ public class Visualizacion : MonoBehaviour
 
         switch (lado)
         {
+            case PlayerSide.Middle:
+                r.width = 1.0f;
+
+                RectTransform rectTransform = UIRoot.GetComponent<RectTransform>();
+                rectTransform.anchorMin = new Vector2(0.5f, 0f);
+                rectTransform.anchorMax = new Vector2(1f, 1f);
+
+                rectTransform.offsetMin = new Vector2(0.0f, rectTransform.offsetMin.y);
+                break;
             case PlayerSide.Right:
                 r.x = 0.5f;
                 break;
@@ -193,6 +221,8 @@ public class Visualizacion : MonoBehaviour
 	
 	void SetCalibr()
 	{
+        if (!Pj.ContrCalib) return;
+
         switch (Pj.ContrCalib.EstAct)
         {
             case ContrCalibracion.Estados.Calibrating:

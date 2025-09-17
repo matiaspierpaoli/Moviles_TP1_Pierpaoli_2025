@@ -57,7 +57,7 @@ public class Respawn : MonoBehaviour
 			}
 		}
 
-		Debug.Log("Player: " + GetComponent<Player>().IdPlayer + ": " + GetComponent<Rigidbody>().linearVelocity);
+		//Debug.Log("Player: " + GetComponent<Player>().IdPlayer + ": " + GetComponent<Rigidbody>().linearVelocity);
 
 	}
 	

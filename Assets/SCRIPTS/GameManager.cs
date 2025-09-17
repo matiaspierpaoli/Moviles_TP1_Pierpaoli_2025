@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,62 +26,58 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Player player1;
     [SerializeField] private Player player2;
 
-    [Header("UI Panels (split 50/50)")]
-    [SerializeField] private GameObject leftPanel;
-    [SerializeField] private GameObject rightPanel;
-
     public Player Player1 => player1;
     public Player Player2 => player2;
 
     private readonly HashSet<int> _calibDone = new();
-    private readonly HashSet<int> _tutoDone = new();
     private float _matchTimer;
     private bool _running;
+
+    private Action<GameState> gameStateChangedHandler;
 
     private void Awake()
     {
         if (Instancia != null && Instancia != this) { Destroy(gameObject); return; }
         Instancia = this;
         DontDestroyOnLoad(gameObject);
+
+        player1.transform.gameObject.SetActive(false);
+        player2.transform.gameObject.SetActive(false);
     }
 
     private void OnEnable()
     {
         CalibrationDone += OnCalibrationDone;
-        GameStateChanged += (GameState gameState) => currentGameState = gameState;
-        BothPlayersFinished += () => RaiseGameState(GameState.Finished);
+        gameStateChangedHandler += gameState => currentGameState = gameState;
+        GameStateChanged += gameStateChangedHandler;
+        PlayerFinished += OnPlayerFinished;
     }
 
-    private void OnDisable()
-    {
-        CalibrationDone -= OnCalibrationDone;
-        GameStateChanged -= (GameState gameState) => currentGameState = gameState;
-        BothPlayersFinished -= () => RaiseGameState(GameState.Finished);
+    private void OnDisable() 
+    { 
+        CalibrationDone -= OnCalibrationDone; 
+        GameStateChanged -= gameStateChangedHandler; 
+        PlayerFinished -= OnPlayerFinished;
     }
-
-    private void Start()
-    {
-        var ctx = GameContext.Instance;
-        var cfg = (ctx != null) ? ctx.Current : new GameConfig { mode = GameMode.Multiplayer };
-        Config = cfg;
-        Debug.Log("Game mode: " + Config.mode.ToString());
-
-        _running = false;
-        _matchTimer = matchLengthSeconds;
-
-        RaisePlayerSideAssigned(0, PlayerSide.Left);
-        RaisePlayerSideAssigned(1, PlayerSide.Right);
-
-        GameCountdownText.transform.parent.gameObject.SetActive(false);
-        StartCountdownText.gameObject.SetActive(false);
-
-        RaiseCalibrationStarted();
-        RaiseGameState(GameState.Calibrating);
+    
+    private void Start() 
+    { 
+        Config = GameContext.Instance?.Current ?? new GameConfig { mode = GameMode.Multiplayer }; 
+        Debug.Log("Game mode: " + Config.mode.ToString()); 
+        
+        SetupPlayers(Config.mode); 
+        
+        _running = false; _matchTimer = matchLengthSeconds; 
+        GameCountdownText.transform.parent.gameObject.SetActive(false); 
+        StartCountdownText.gameObject.SetActive(false); 
+        
+        RaiseCalibrationStarted(); 
+        RaiseGameState(GameState.Calibrating); 
     }
 
     private void Update()
     {
-        switch (currentGameState)   
+        switch (currentGameState)
         {
             case GameState.Calibrating:
                 if (!player1.selected)
@@ -133,18 +130,43 @@ public class GameManager : MonoBehaviour
     }
 
     // ---------- Observer outputs ----------
-    private void SetPlayerUI(int playerId, bool visible)
+
+
+
+    // ---------- Observer inputs ----------
+    private void OnCalibrationDone(int playerId)
     {
-        RaiseTogglePlayerUI(playerId, visible);
+        _calibDone.Add(playerId);
+        if (_calibDone.Count >= 2 && Config.mode == GameMode.Multiplayer)
+        {
+            StartCoroutine(CountdownCoroutine(changeToPlayingStateDuration));
+        }
+        else if (Config.mode == GameMode.SinglePlayer)
+        {
+            StartCoroutine(CountdownCoroutine(changeToPlayingStateDuration));
+        }
     }
+
+    private void OnPlayerFinished(int playerId)
+    {
+        if (playerId == Player1.IdPlayer)
+            Player1.finishedRace = true;
+        else if (playerId == Player2.IdPlayer)
+            Player2.finishedRace = true;
+
+        if ((Config.mode == GameMode.SinglePlayer && playerId == player1.IdPlayer) ||
+            (Config.mode == GameMode.Multiplayer && player1.finishedRace && player2.finishedRace))
+        {
+            RaiseGameState(GameState.Finished);
+        }
+    }
+
+    // ---------- Internal ----------
 
     private void BeginMatch()
     {
         _running = true;
         _matchTimer = matchLengthSeconds;
-
-        SetPlayerUI(0, true);
-        SetPlayerUI(1, true);
 
         RaiseMatchStarted();
     }
@@ -154,24 +176,28 @@ public class GameManager : MonoBehaviour
         if (!_running) return;
         _running = false;
 
-        SetPlayerUI(0, false);
-        SetPlayerUI(1, false);
-
         RaiseMatchEnded();
         RaiseGameState(GameState.Finished);
     }
 
-    // ---------- Observer inputs ----------
-    private void OnCalibrationDone(int playerId)
-    {
-        _calibDone.Add(playerId);
-        if (_calibDone.Count >= 2)
-        {
-            StartCoroutine(CountdownCoroutine(changeToPlayingStateDuration));
-        }
-    }
+    private void SetupPlayers(GameMode mode) 
+    { 
+        player1.gameObject.SetActive(true);
 
-    // ---------- Internal ----------
+        switch (mode) 
+        { 
+            case GameMode.SinglePlayer: 
+                RaiseSingleplayerActive(); 
+                RaisePlayerSideAssigned(0, PlayerSide.Middle); 
+                break; 
+            case GameMode.Multiplayer: 
+                player2.gameObject.SetActive(true); 
+                RaiseMultiplayerActive(); 
+                RaisePlayerSideAssigned(0, PlayerSide.Left); 
+                RaisePlayerSideAssigned(1, PlayerSide.Right); 
+                break; 
+        } 
+    }
 
     private System.Collections.IEnumerator CountdownCoroutine(float seconds)
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,19 +16,26 @@ public class CarController : MonoBehaviour {
 
     private bool isAccelAllowed = false;
 
+    private Action calibrationHandler;
+    private Action matchStartedHandler;
+    private Action matchEndedHandler;
+
     private void OnEnable()
     {
-        CalibrationStarted += () => isAccelAllowed = false;
-        MatchStarted += () => isAccelAllowed = true;
-        MatchEnded += () => isAccelAllowed = false;
+        calibrationHandler = () => isAccelAllowed = false;
+        matchStartedHandler = () => isAccelAllowed = true;
+        matchEndedHandler = () => isAccelAllowed = false;
+
+        CalibrationStarted += calibrationHandler;
+        MatchStarted += matchStartedHandler;
+        MatchEnded += matchEndedHandler;
     }
 
     private void OnDisable()
     {
-        CalibrationStarted -= () => isAccelAllowed = false;
-        MatchStarted -= () => isAccelAllowed = true;
-        MatchEnded -= () => isAccelAllowed = false;
-
+        CalibrationStarted -= calibrationHandler;
+        MatchStarted -= matchStartedHandler;
+        MatchEnded -= matchEndedHandler;
     }
 	
 	// Update is called once per frame
