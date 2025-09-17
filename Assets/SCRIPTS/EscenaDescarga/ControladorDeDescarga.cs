@@ -198,10 +198,10 @@ public class ControladorDeDescarga : MonoBehaviour
 		
 		for (int i = 0; i < Componentes.Length; i++)
 		{
-			Componentes[i].SetActiveRecursively(false);
+			Componentes[i].SetActive(false);
 		}
 		
-		CamaraConduccion.SetActiveRecursively(true);
+		CamaraConduccion.SetActive(true);
 		
 		CollCamion.enabled = true;
 		

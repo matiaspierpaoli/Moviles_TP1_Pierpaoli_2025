@@ -56,12 +56,14 @@ public class Visualizacion : MonoBehaviour
     {
 		PlayerSideAssigned += OnPlayerSideAssigned;
         PlayerFinished += OnPlayerFinished;
+        MatchStarted += OnMatchStarted;
     }
 
     private void OnDisable()
     {
         PlayerSideAssigned -= OnPlayerSideAssigned;
         PlayerFinished -= OnPlayerFinished;
+        MatchStarted -= OnMatchStarted;
     }
 
     private void Awake()
@@ -73,6 +75,10 @@ public class Visualizacion : MonoBehaviour
         {
             component.gameObject.SetActive(false);
         }
+
+        CamCalibracion.enabled = false;
+        CamConduccion.enabled = false;
+        CamDescarga.enabled = false;
     }
 
     void Start () 
@@ -194,7 +200,13 @@ public class Visualizacion : MonoBehaviour
         CamDescarga.rect = r;
     }
 	
-	void SetBonus()
+    private void OnMatchStarted()
+    {
+        calibratingScene.SetActive(false);
+    }
+
+
+    void SetBonus()
 	{
         if (Pj.ContrDesc.PEnMov != null)
         {
