@@ -60,7 +60,11 @@ public class Player : MonoBehaviour
 	{
 		for(int i = 0; i< Bolasas.Length;i++)
 			Bolasas[i] = null;
-	}
+
+		Dinero = 0;
+        GameContext.Instance.SetPlayerMoney(IdPlayer, Dinero);
+
+    }
 
     //------------------------------------------------------------------//
 
@@ -98,7 +102,10 @@ public class Player : MonoBehaviour
 			Bolasas[CantBolsAct] = b;
 			CantBolsAct++;
 			Dinero += (int)b.Monto;
-			b.Desaparecer();
+
+            GameContext.Instance.SetPlayerMoney(IdPlayer, Dinero);
+
+            b.Desaparecer();
 			return true;
 		}
 		else

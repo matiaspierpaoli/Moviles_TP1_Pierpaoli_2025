@@ -11,7 +11,7 @@ public class GameBootstrapper : MonoBehaviour
     {
         var cfg = (GameContext.Instance != null)
             ? GameContext.Instance.Current
-            : new GameConfig { mode = gameMode };
+            : new GameConfig { mode = gameMode, player1Money = 0, player2Money = 0 };
 
         if (GameContext.Instance == null)
         {

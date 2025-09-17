@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     public GameConfig Config { get; private set; }
     private GameState currentGameState = GameState.Calibrating;
 
+    [SerializeField] private SceneLoader sceneLoader;
+    [SerializeField] private string ptsFinalSceneName = "PtsFinal";
+
     [Header("Match")]
     [SerializeField] private bool autoStartAfterBothTutorials = true;
     [SerializeField] float changeToPlayingStateDuration = 1f;
@@ -62,7 +65,7 @@ public class GameManager : MonoBehaviour
     
     private void Start() 
     { 
-        Config = GameContext.Instance?.Current ?? new GameConfig { mode = GameMode.Multiplayer }; 
+        Config = GameContext.Instance?.Current ?? new GameConfig { mode = GameMode.Multiplayer, player1Money = 0, player2Money = 0 }; 
         Debug.Log("Game mode: " + Config.mode.ToString()); 
         
         SetupPlayers(Config.mode); 
@@ -82,17 +85,17 @@ public class GameManager : MonoBehaviour
             case GameState.Calibrating:
                 if (!player1.selected)
                 {
-                    if (InputManager.Instance.IsUpPressed(verticalInputName, "0"))
+                    if (InputManager.Instance.IsUpPressed(verticalInputName, Player1.IdPlayer.ToString()))
                     {
-                        RaisePlayerSelected(0);
+                        RaisePlayerSelected(Player1.IdPlayer);
                     }
                 }
 
                 if (!player2.selected)
                 {
-                    if (InputManager.Instance.IsUpPressed(verticalInputName, "1"))
+                    if (InputManager.Instance.IsUpPressed(verticalInputName, Player2.IdPlayer.ToString()))
                     {
-                        RaisePlayerSelected(1);
+                        RaisePlayerSelected(Player2.IdPlayer);
                     }
                 }
                 break;
@@ -123,6 +126,8 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Finished:
                 EndMatch();
+                sceneLoader.LoadLevel(ptsFinalSceneName);
+
                 break;
             default:
                 break;
@@ -188,13 +193,13 @@ public class GameManager : MonoBehaviour
         { 
             case GameMode.SinglePlayer: 
                 RaiseSingleplayerActive(); 
-                RaisePlayerSideAssigned(0, PlayerSide.Middle); 
+                RaisePlayerSideAssigned(Player1.IdPlayer, PlayerSide.Middle); 
                 break; 
             case GameMode.Multiplayer: 
                 player2.gameObject.SetActive(true); 
                 RaiseMultiplayerActive(); 
-                RaisePlayerSideAssigned(0, PlayerSide.Left); 
-                RaisePlayerSideAssigned(1, PlayerSide.Right); 
+                RaisePlayerSideAssigned(Player1.IdPlayer, PlayerSide.Left); 
+                RaisePlayerSideAssigned(Player2.IdPlayer, PlayerSide.Right); 
                 break; 
         } 
     }

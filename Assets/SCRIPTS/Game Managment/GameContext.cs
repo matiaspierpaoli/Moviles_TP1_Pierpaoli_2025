@@ -8,7 +8,9 @@ public sealed class GameContext : MonoBehaviour
 {
     public static GameContext Instance { get; private set; }
 
-    public GameConfig Current { get; private set; }
+    [SerializeField] private GameConfig current = new GameConfig(); // instancia viva
+    public GameConfig Current => current;
+
     public event Action<GameConfig> ConfigChanged;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -23,8 +25,20 @@ public sealed class GameContext : MonoBehaviour
 
     public void SetConfig(GameConfig cfg)
     {
-        Current = cfg;
-        ConfigChanged?.Invoke(Current);
+        current.mode = cfg.mode;
+        current.playerCount = cfg.playerCount;
+        current.player1Money = cfg.player1Money;
+        current.player2Money = cfg.player2Money;
+
+        ConfigChanged?.Invoke(current);
+    }
+
+    public void SetPlayerMoney(int playerId, int money)
+    {
+        if (playerId == 0) current.player1Money = money;
+        else if (playerId == 1) current.player2Money = money;
+
+        ConfigChanged?.Invoke(current);
     }
 
     public void StartGame(string sceneName)
