@@ -9,7 +9,7 @@ public class Bolsa : MonoBehaviour
 	public Texture2D ImagenInventario;
 	Player Pj = null;
 	
-	bool Desapareciendo;
+	public bool Desapareciendo;
 	public GameObject Particulas;
 	public float TiempParts = 2.5f;
 

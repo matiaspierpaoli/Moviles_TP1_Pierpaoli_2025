@@ -17,7 +17,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool autoStartAfterBothTutorials = true;
     [SerializeField] float changeToPlayingStateDuration = 1f;
     [SerializeField] float startCountdown = 3f;
-    [SerializeField] private float matchLengthSeconds = 60f;
+    [SerializeField] private float matchLengthSecondsEasy = 90f;
+    [SerializeField] private float matchLengthSecondsMedium = 75f;
+    [SerializeField] private float matchLengthSecondsHard = 60f;
     [SerializeField] bool isCountdownAllowed = false;
     [SerializeField] Text StartCountdownText;
     [SerializeField] Text GameCountdownText;
@@ -65,17 +67,34 @@ public class GameManager : MonoBehaviour
     
     private void Start() 
     { 
-        Config = GameContext.Instance?.Current ?? new GameConfig { mode = GameMode.Multiplayer, player1Money = 0, player2Money = 0 }; 
+        Config = GameContext.Instance?.Current ?? new GameConfig { mode = GameMode.Multiplayer, difficulty = GameDifficulty.Easy, player1Money = 0, player2Money = 0 }; 
         Debug.Log("Game mode: " + Config.mode.ToString()); 
         
         SetupPlayers(Config.mode); 
         
-        _running = false; _matchTimer = matchLengthSeconds; 
+        _running = false;
+        switch (Config.difficulty)  
+        {
+            case GameDifficulty.Easy:
+                _matchTimer = matchLengthSecondsEasy;
+                break;
+            case GameDifficulty.Medium:
+                _matchTimer = matchLengthSecondsMedium;
+                break;
+            case GameDifficulty.Hard:
+                _matchTimer = matchLengthSecondsHard;
+                break;
+            default:
+                break;
+        }
+
         GameCountdownText.transform.parent.gameObject.SetActive(false); 
         StartCountdownText.gameObject.SetActive(false); 
         
         RaiseCalibrationStarted(); 
         RaiseGameState(GameState.Calibrating); 
+
+        RaiseGameDifficulty(Config.difficulty);
     }
 
     private void Update()
@@ -150,6 +169,8 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(CountdownCoroutine(changeToPlayingStateDuration));
         }
+
+        RaiseMatchCountdownStarted();
     }
 
     private void OnPlayerFinished(int playerId)
@@ -171,7 +192,6 @@ public class GameManager : MonoBehaviour
     private void BeginMatch()
     {
         _running = true;
-        _matchTimer = matchLengthSeconds;
 
         RaiseMatchStarted();
     }

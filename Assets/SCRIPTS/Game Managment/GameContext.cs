@@ -26,6 +26,7 @@ public sealed class GameContext : MonoBehaviour
     public void SetConfig(GameConfig cfg)
     {
         current.mode = cfg.mode;
+        current.difficulty = cfg.difficulty;
         current.playerCount = cfg.playerCount;
         current.player1Money = cfg.player1Money;
         current.player2Money = cfg.player2Money;

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 785e755198d30074a9ae40144ab79170, type: 3}
+  m_Name: HardSettings
+  m_EditorClassIdentifier: 
+  bagSpawnInterval: 10
+  obstacleSpawnInterval: 6
+  taxiSpawnInterval: 4
+  maxBags: 10
+  maxCones: 15
+  maxBoxes: 18
+  maxTaxis: 8
+  maxDeposits: 4
+  initialBags: 5
+  initialCones: 10
+  initialBoxes: 12
+  initialTaxis: 6
+  initialDeposits: 2
+  bagSpawnChance: 0.4
+  obstacleSpawnChance: 0.8
+  taxiSpeedMultiplier: 2
+  bagBaseValue: 25000
+  bagValueRandomness: 15000
