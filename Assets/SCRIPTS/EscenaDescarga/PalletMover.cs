@@ -28,7 +28,7 @@ public class PalletMover : ManejoPallets
                 break;
 
             case EstadoPallet.FirstStep:
-                if (Tenencia() && verticalInput > InputManager.Instance.GetMinAxisValue())
+                if (Tenencia() && verticalInput < InputManager.Instance.GetMinAxisValue())
                 {
                     SegundoPaso();
                 }
