@@ -42,6 +42,11 @@ public sealed class GameContext : MonoBehaviour
         ConfigChanged?.Invoke(current);
     }
 
+    public void SetDifficulty(GameDifficulty difficulty)
+    {
+        current.difficulty = difficulty;
+    }
+
     public void StartGame(string sceneName)
     {
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);

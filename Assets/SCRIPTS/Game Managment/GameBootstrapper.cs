@@ -21,4 +21,16 @@ public class GameBootstrapper : MonoBehaviour
             ctx.SetConfig(cfg);
         }
     }
+
+    public void SetSingleplayerMode()
+    {
+        if (GameContext.Instance)
+            GameContext.Instance.Current.mode = GameMode.SinglePlayer;
+    }
+
+    public void SetMultiplayerMode()
+    {
+        if (GameContext.Instance)
+            GameContext.Instance.Current.mode = GameMode.Multiplayer;
+    }
 }
