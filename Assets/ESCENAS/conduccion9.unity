@@ -77252,14 +77252,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b714c2aa2dd4752478b0be8db1bfa03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TutorialImages:
+  TutorialImagesPC:
   - {fileID: 2800000, guid: 2c9ac95f461fb0448aca4408de9647dc, type: 3}
   - {fileID: 2800000, guid: f836f4a482f17844b801b9ceb13c1f8a, type: 3}
   - {fileID: 2800000, guid: b7e088a57ed74ae4ebb26597dfb96cd7, type: 3}
+  TutorialImagesMobile:
+  - {fileID: 2800000, guid: c34772a56dd099843ab9fdb07f8cb1b9, type: 3}
+  - {fileID: 2800000, guid: 33bcf7fc6c7db4d46a23ce52a070b64a, type: 3}
+  - {fileID: 2800000, guid: d4e7719838cc8874c83c3a73cb469fb2, type: 3}
   interval: 1.2
   isPlayer1: 1
-  PCCalibImage: {fileID: 2800000, guid: e7070f5025303a04f8753dd8acb5245e, type: 3}
-  MobileCalibImage: {fileID: 2800000, guid: 7728fa8ba9181fe4ebdcb8509838f013, type: 3}
+  PCCalibImagePlayer1: {fileID: 2800000, guid: e7070f5025303a04f8753dd8acb5245e, type: 3}
+  PCCalibImagePlayer2: {fileID: 2800000, guid: 7728fa8ba9181fe4ebdcb8509838f013, type: 3}
+  MobileCalibImage: {fileID: 2800000, guid: 282eaa98cd4e13341a7b6e575794c204, type: 3}
   ImaReady: {fileID: 2800000, guid: cd96293139f94fb4b925e67c2069bc43, type: 3}
   ContrCalib: {fileID: 13045}
 --- !u!114 &12642
@@ -77274,14 +77279,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b714c2aa2dd4752478b0be8db1bfa03b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TutorialImages:
+  TutorialImagesPC:
   - {fileID: 2800000, guid: 2c9ac95f461fb0448aca4408de9647dc, type: 3}
   - {fileID: 2800000, guid: f836f4a482f17844b801b9ceb13c1f8a, type: 3}
   - {fileID: 2800000, guid: b7e088a57ed74ae4ebb26597dfb96cd7, type: 3}
+  TutorialImagesMobile:
+  - {fileID: 2800000, guid: c34772a56dd099843ab9fdb07f8cb1b9, type: 3}
+  - {fileID: 2800000, guid: 33bcf7fc6c7db4d46a23ce52a070b64a, type: 3}
+  - {fileID: 2800000, guid: d4e7719838cc8874c83c3a73cb469fb2, type: 3}
   interval: 1.2
   isPlayer1: 0
-  PCCalibImage: {fileID: 2800000, guid: e7070f5025303a04f8753dd8acb5245e, type: 3}
-  MobileCalibImage: {fileID: 2800000, guid: 7728fa8ba9181fe4ebdcb8509838f013, type: 3}
+  PCCalibImagePlayer1: {fileID: 2800000, guid: e7070f5025303a04f8753dd8acb5245e, type: 3}
+  PCCalibImagePlayer2: {fileID: 2800000, guid: 7728fa8ba9181fe4ebdcb8509838f013, type: 3}
+  MobileCalibImage: {fileID: 2800000, guid: 282eaa98cd4e13341a7b6e575794c204, type: 3}
   ImaReady: {fileID: 2800000, guid: cd96293139f94fb4b925e67c2069bc43, type: 3}
   ContrCalib: {fileID: 13048}
 --- !u!114 &12643
@@ -81617,7 +81627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ac78867d039fc94c8b2014b9fff4683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameMode: 1
+  gameMode: 0
   gameDifficulty: 0
 --- !u!1001 &491164817
 PrefabInstance:
@@ -84949,6 +84959,52 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 36
       objectReference: {fileID: 0}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: ImagesPC.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesPC.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 2c9ac95f461fb0448aca4408de9647dc,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesPC.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: f836f4a482f17844b801b9ceb13c1f8a,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesPC.Array.data[2]'
+      value: 
+      objectReference: {fileID: 21300000, guid: b7e088a57ed74ae4ebb26597dfb96cd7,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: ImagesMobile.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesMobile.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: c34772a56dd099843ab9fdb07f8cb1b9,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesMobile.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 33bcf7fc6c7db4d46a23ce52a070b64a,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesMobile.Array.data[2]'
+      value: 
+      objectReference: {fileID: 21300000, guid: d4e7719838cc8874c83c3a73cb469fb2,
+        type: 3}
     - target: {fileID: 6244881719891685830, guid: c0b6ed3ede373e6499963fd200c88438,
         type: 3}
       propertyPath: m_Pivot.x
@@ -86532,6 +86588,52 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 36
       objectReference: {fileID: 0}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: ImagesPC.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesPC.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 2c9ac95f461fb0448aca4408de9647dc,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesPC.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: f836f4a482f17844b801b9ceb13c1f8a,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesPC.Array.data[2]'
+      value: 
+      objectReference: {fileID: 21300000, guid: b7e088a57ed74ae4ebb26597dfb96cd7,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: ImagesMobile.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesMobile.Array.data[0]'
+      value: 
+      objectReference: {fileID: 21300000, guid: c34772a56dd099843ab9fdb07f8cb1b9,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesMobile.Array.data[1]'
+      value: 
+      objectReference: {fileID: 21300000, guid: 33bcf7fc6c7db4d46a23ce52a070b64a,
+        type: 3}
+    - target: {fileID: 5830463817227116345, guid: c0b6ed3ede373e6499963fd200c88438,
+        type: 3}
+      propertyPath: 'ImagesMobile.Array.data[2]'
+      value: 
+      objectReference: {fileID: 21300000, guid: d4e7719838cc8874c83c3a73cb469fb2,
+        type: 3}
     - target: {fileID: 6244881719891685830, guid: c0b6ed3ede373e6499963fd200c88438,
         type: 3}
       propertyPath: m_AnchoredPosition.x
