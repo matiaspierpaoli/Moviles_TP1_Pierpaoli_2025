@@ -424,6 +424,7 @@ GameObject:
   - component: {fileID: 4084366831678404678}
   - component: {fileID: 6901218470760738293}
   - component: {fileID: 5135115191144603305}
+  - component: {fileID: 5685400279472235867}
   m_Layer: 0
   m_Name: Deposit
   m_TagString: Deposito
@@ -539,6 +540,18 @@ MonoBehaviour:
   Vacio: 1
   Contr1: {fileID: 0}
   Contr2: {fileID: 0}
+--- !u!114 &5685400279472235867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6542812235587598322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7550eaad460e97e47be0f518086a3c11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7052724948937150032
 GameObject:
   m_ObjectHideFlags: 0

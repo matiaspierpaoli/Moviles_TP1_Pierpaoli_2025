@@ -26,8 +26,4 @@ public class DifficultySettings : ScriptableObject
     [Range(0f, 1f)] public float bagSpawnChance = 0.7f;
     [Range(0f, 1f)] public float obstacleSpawnChance = 0.5f;
     public float taxiSpeedMultiplier = 1f;
-
-    [Header("Object Values")]
-    public int bagBaseValue = 100000;
-    public int bagValueRandomness = 50000;
 }

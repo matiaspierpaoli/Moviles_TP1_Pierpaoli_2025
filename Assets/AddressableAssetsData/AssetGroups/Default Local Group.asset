@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_GUID: 8842ca9d977250845982c46390dd0b54
+  m_SerializeEntries:
+  - m_GUID: 19331b82df57b834caec4d22a6192ace
+    m_Address: Assets/PREFABS/OBSTACULOS/Cono1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 514ac53862939534083df9fb1d9b6d0d
+    m_Address: Assets/PREFABS/Bolsa Dinero.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d54075b5438ff640aaa4483b2462657
+    m_Address: Assets/PREFABS/Deposito/Deposit.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7292c36bbd8963848bd4cc6f5e80739c
+    m_Address: Assets/PREFABS/OBSTACULOS/Caja1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3937ebfeadcea949aaccad482540ba5
+    m_Address: Assets/PREFABS/OBSTACULOS/Taxi/Taxi.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: eeab69b8b3ce4a04a853d51f3b094544, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b8e5748079becc04d88a68b86ff6ca61, type: 2}
+    - {fileID: 11400000, guid: 65341d3f95820fe459efb78524abe2c8, type: 2}

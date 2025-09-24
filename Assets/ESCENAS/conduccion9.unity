@@ -85990,6 +85990,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25529410d969015498a516f4ef25009d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bagRef:
+    m_AssetGUID: 514ac53862939534083df9fb1d9b6d0d
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  taxiRef:
+    m_AssetGUID: c3937ebfeadcea949aaccad482540ba5
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  coneRef:
+    m_AssetGUID: 19331b82df57b834caec4d22a6192ace
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  boxRef:
+    m_AssetGUID: 7292c36bbd8963848bd4cc6f5e80739c
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  depositRef:
+    m_AssetGUID: 5d54075b5438ff640aaa4483b2462657
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   bagPrefab: {fileID: 100000, guid: 514ac53862939534083df9fb1d9b6d0d, type: 3}
   taxiPrefab: {fileID: 100030, guid: c3937ebfeadcea949aaccad482540ba5, type: 3}
   conePrefab: {fileID: 100000, guid: 19331b82df57b834caec4d22a6192ace, type: 3}

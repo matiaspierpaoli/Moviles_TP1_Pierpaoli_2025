@@ -48,7 +48,7 @@ public class AdaptiveSpawnManager : MonoBehaviour
         MatchEnded -= OnMatchEnded;
     }
 
-    public void SetDifficulty(GameDifficulty difficulty)
+    public async void SetDifficulty(GameDifficulty difficulty)
     {
         currentDifficulty = difficulty switch
         {
@@ -57,7 +57,7 @@ public class AdaptiveSpawnManager : MonoBehaviour
             _ => easySettings
         };
 
-        factory.SetDifficulty(currentDifficulty);
+        await factory.WarmupAsync(currentDifficulty);
 
         StopAllSpawning();
 
@@ -188,22 +188,12 @@ public class AdaptiveSpawnManager : MonoBehaviour
     {
         foreach (var kvp in activeObjects)
         {
-            foreach (GameObject obj in kvp.Value)
-            {
-                if (obj != null)
-                {
-                    Destroy(obj);
-                }
-            }
+            foreach (var obj in kvp.Value)
+                if (obj) obj.SetActive(false); // devuelve al pool vía OnDisable
             kvp.Value.Clear();
         }
 
-        currentBags = 0;
-        currentCones = 0;
-        currentBoxes = 0;
-        currentTaxis = 0;
-
-        Debug.Log("All objects cleared");
+        currentBags = currentCones = currentBoxes = currentTaxis = 0;
     }
 
     private IEnumerator BagSpawningRoutine()
@@ -389,5 +379,6 @@ public class AdaptiveSpawnManager : MonoBehaviour
     private void OnDestroy()
     {
         StopAllSpawning();
+        if (factory) factory.ReleaseAll();
     }
 }
