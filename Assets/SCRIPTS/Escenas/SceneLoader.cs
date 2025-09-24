@@ -13,13 +13,18 @@ public class SceneLoader : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-    public void ExitGame()
+    public void LoadLevelWithTransition(string sceneName)
     {
-        Application.Quit();
+        SceneTransit.Go(sceneName);
     }
 
     public void LoadLevelAsync(string sceneName)
     {
         SceneManager.LoadSceneAsync(sceneName);
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }
