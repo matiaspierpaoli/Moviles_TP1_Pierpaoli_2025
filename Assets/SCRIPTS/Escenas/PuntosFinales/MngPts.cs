@@ -8,9 +8,9 @@ public class MngPts : MonoBehaviour
 {
     public SceneLoader sceneLoader;
     public string creditsSceneName = "Credits";
+    public float startTransitionDelay = 2.0f;
 
     public float TiempEmpAnims = 2.5f;
-    public float TiempEspReiniciar = 10f;
     public float TiempParpadeo = 0.7f;
 
     public float sceneTransitionDuration = 10f;
@@ -54,12 +54,6 @@ public class MngPts : MonoBehaviour
             SceneManager.LoadScene(0);
         }
 
-        TiempEspReiniciar -= Time.deltaTime;
-        if (TiempEspReiniciar <= 0)
-        {
-            SceneManager.LoadScene(0);
-        }
-
         if (activadoAnims)
         {
             tempoParpadeo += Time.deltaTime;
@@ -68,6 +62,7 @@ public class MngPts : MonoBehaviour
             {
                 tempoParpadeo = 0;
                 primerImaParp = !primerImaParp;
+                StartCoroutine(TransitionSceneCoroutine(startTransitionDelay));
             }
         }
 
@@ -114,5 +109,12 @@ public class MngPts : MonoBehaviour
         {
             leftMoneyText.text = "$" + viz.PrepararNumeros(player1Money);
         }
+    }
+
+    private IEnumerator TransitionSceneCoroutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+
+        sceneLoader.LoadLevel(creditsSceneName);
     }
 }

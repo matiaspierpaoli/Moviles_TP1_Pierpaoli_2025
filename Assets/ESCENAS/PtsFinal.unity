@@ -452,10 +452,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneLoader: {fileID: 261769155}
   creditsSceneName: Credits
+  startTransitionDelay: 2
   TiempEmpAnims: 2.5
   TiempEspReiniciar: 15
   TiempParpadeo: 0.3
-  sceneTransitionDuration: 10
+  sceneTransitionDuration: 3
   leftMoneyText: {fileID: 115347992}
   rightMoneyText: {fileID: 2094543605}
   winningPlayerImage: {fileID: 226529444}
