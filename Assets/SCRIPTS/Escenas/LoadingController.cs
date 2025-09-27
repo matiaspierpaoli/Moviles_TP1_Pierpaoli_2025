@@ -1,29 +1,49 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
 
 public class LoadingController : MonoBehaviour
 {
     [Header("UI")]
-    [SerializeField] private Slider progressBar;
+    [SerializeField] Slider progressBar;
+    [SerializeField] string defaultLevelToLoad = "MainMenu";
+    [SerializeField] bool shouldShowHint = false;
+    [SerializeField] Image backgoundImage;
+    [SerializeField] Sprite defaultBackgoundSprite;
+    [SerializeField] LoadingProfile defaultProfile;
+    [SerializeField] GameObject hintParent;
 
-    [Header("Timing")]
-    [SerializeField] private float minDisplayTime = 2.2f;
-    [SerializeField]
-    private AnimationCurve fakeCurve =
-        AnimationCurve.EaseInOut(0, 0, 1, 1);
+    float minDisplayTime;
+    AnimationCurve fakeCurve;
 
-    private void Start() => StartCoroutine(LoadNext());
-
-    IEnumerator LoadNext()
+    void Awake()
     {
-        string target = SceneTransit.NextScene;
+        var p = SceneTransit.Profile ? SceneTransit.Profile : defaultProfile;
+
+        minDisplayTime = p ? p.minDisplayTime : 2.0f;
+        fakeCurve = p ? p.fakeCurve : AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+        if (backgoundImage)
+            backgoundImage.sprite = p && p.backgoundSprite ? p.backgoundSprite : defaultBackgoundSprite;
+
+        shouldShowHint = p ? p.shouldShowHint : shouldShowHint;
+        if (hintParent) hintParent.SetActive(shouldShowHint);
+        if (progressBar && p) progressBar.gameObject.SetActive(p.showProgressBar);
+    }
+
+    void Start() => StartCoroutine(Run());
+
+    IEnumerator Run()
+    {
+        string target = !string.IsNullOrEmpty(SceneTransit.NextScene)
+                        ? SceneTransit.NextScene
+                        : defaultLevelToLoad;
+
         var op = SceneManager.LoadSceneAsync(target, LoadSceneMode.Single);
         op.allowSceneActivation = false;
 
-        float elapsed = 0f;
-        float visual = 0f;
+        float visual = 0f, elapsed = 0f;
 
         while (true)
         {
@@ -34,18 +54,18 @@ public class LoadingController : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / minDisplayTime);
             float fake = fakeCurve.Evaluate(t);
 
-            float targetVisual = Mathf.Min(fake, real);
+            float targetVisual = Mathf.Min(real, fake);
 
             visual = Mathf.MoveTowards(visual, targetVisual, 2.5f * Time.unscaledDeltaTime);
             if (progressBar) progressBar.value = visual;
 
             if (t >= 1f && real >= 1f) break;
-
             yield return null;
         }
 
-        yield return new WaitForSecondsRealtime(0.25f);
-
+        yield return new WaitForSecondsRealtime(0.2f);
         op.allowSceneActivation = true;
+
+        SceneTransit.Clear();
     }
 }
