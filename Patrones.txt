@@ -1,0 +1,19 @@
+Patrones utilizados:
+
+Patron 1: Observer
+
+El GameManager se encarga de no solo controlar el flujo del juego a traves de un mini state, sino que es quien levanta eventos en estos cambios de estado al mismo tiempo que escucha eventos particulares para levantar los propios.
+Para ello, ademas de ser un singleton, toma una clase llamada GameSignals que define que eventos son los que se levantarian y los metodos para hacerlo, siendo esta misma estatica a modo de su inclucion en otras clases como using static GameSignals simplemente para acceder a esos eventos o metodos.
+Alguno ejemplos son en el Start del GameManager un "RaiseCalibrationStarted()" , "RaiseGameState(GameState.Calibrating)" y "RaiseGameDifficulty(Config.difficulty)" para avisarle al propio gameManager de un cambio de estado o el Player que hace "GameStateChanged += OnGameStateChanged;" donde puede cambiar su estado interno para habilitar cierta UI dependiendo si esta en Calibracion, Conduccion o Deposito. 
+Otro ejemplo de evento que levante el GameManager podria ser "RaiseMatchCountdownStarted()" una vez que el player o ambos players hayan teminado su caliracion para que al cambiar a conduccion, se empiece el spawneo de objetos en AdaptiveSpawnManager.
+
+Patron 2: Singleton
+
+Se utiliza en muchas clases como GameManager o InputManager, pero el lugar mas importante es en "GameContext" ya que es una instancia que se crea en el menu, a traves del GameBoostrapper, a modo de coleccion de configuraciones como el modo o la dificultad seleccionadas en el menu normal y de dificultades.
+Esta instancia de GameContext se usa en muchos lugares por ejemplo el GameManager para que en el start se guarde esa configuracion y se asigne en el timer del juego segun la difucultad o el modo si es single-player o multi-player para activar o desactivar gameObjects como el player o UI.
+
+Patron 3: Factory
+
+A la hora de spawnear obstaculos como conos, cajas o taxis, o tambien bolsas y depositos uso AdaptiveSpawnManager, quien toma los posibles puntos de spawneo de cada objeto y guarda la factory donde a partir de la dificultad se precargan objetos usando Adressables y luego se spawnean al entrar terminar la calibracion.
+Asi el unico proposito de la factory es crear y despawnear estos objetos. Los objetos que conviven en escena se guardan en una Pool por lo que podria considerarse el uso de este patron pero por simplicidad no lo hago.
+Con esto en cuenta vale la pena aclarar que no conviene iniciar el game desde la escena de conduccion9 sino desde el main menu.
