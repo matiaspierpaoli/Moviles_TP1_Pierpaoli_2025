@@ -156,8 +156,9 @@ public class ControladorDeDescarga : MonoBehaviour
 		Contador--;
 		
 		Pj.Dinero += (int)Bonus;
-		
-		if(Contador <= 0)
+        GameContext.Instance.SetPlayerMoney(Pj.IdPlayer, Pj.Dinero);
+
+        if (Contador <= 0)
 		{
 			Finalizacion();
 		}

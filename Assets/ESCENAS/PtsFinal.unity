@@ -454,7 +454,6 @@ MonoBehaviour:
   creditsSceneName: Credits
   startTransitionDelay: 2
   TiempEmpAnims: 2.5
-  TiempEspReiniciar: 15
   TiempParpadeo: 0.3
   sceneTransitionDuration: 3
   leftMoneyText: {fileID: 115347992}
@@ -571,11 +570,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1605356708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 515, y: 37}
-  m_SizeDelta: {x: 599.18, y: 150}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -469, y: 45}
+  m_SizeDelta: {x: 599.17993, y: 150}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &115347992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -737,6 +736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f67716af5dea943a2a2a674f56e560, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldLoadProfile: 0
+  loadProfile: {fileID: 0}
 --- !u!1 &1605356704
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,11 +943,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1605356708}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -491, y: 37}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 467, y: 45}
   m_SizeDelta: {x: 599.18, y: 150}
-  m_Pivot: {x: 1, y: 0}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &2094543605
 MonoBehaviour:
   m_ObjectHideFlags: 0
